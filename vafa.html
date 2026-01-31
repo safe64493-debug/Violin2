@@ -1,0 +1,149 @@
+<!DOCTYPE html>
+<html lang="fa">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>برای وفا</title>
+<style>
+  body {
+    margin: 0;
+    height: 100vh;
+    background: radial-gradient(circle at top, #1a1a2e, #0f0c29);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    font-family: sans-serif;
+    color: #fff;
+    text-align: center;
+    padding: 20px;
+    overflow: hidden;
+    flex-direction: column;
+  }
+  .box {
+    max-width: 400px;
+    font-size: 18px;
+    line-height: 2;
+    transition: opacity 0.8s, text-shadow 0.8s;
+  }
+  .heart {
+    position: fixed;
+    top: -10px;
+    font-size: 22px;
+    animation: fall linear infinite;
+    opacity: 0.8;
+  }
+  .link-button {
+    display: none;
+    margin-top: 20px;
+    padding: 12px 25px;
+    font-size: 18px;
+    color: #fff;
+    background-color: #ff3366;
+    border: none;
+    border-radius: 10px;
+    cursor: pointer;
+    text-decoration: none;
+  }
+  @keyframes fall {
+    to { transform: translateY(110vh); }
+  }
+</style>
+</head>
+<body onclick="nextText()">
+
+<audio id="music">
+  <source src="music.mp3" type="audio/mpeg">
+</audio>
+
+<div class="box" id="text">
+  لمس صفحه فراموش نشه، تو‌دلی من ❤️
+  <br><br>
+  لمس کن تا ادامه متن بیاد
+</div>
+
+<a href="tg://resolve?domain=Lover_Kourd" class="link-button" id="tgLink">ورود به چت تلگرام</a>
+
+<script>
+const texts = [
+  "وفا جان… ❤️",
+  "کنار تو بودن حس تازه‌ای از شادیه…",
+  "هر لحظه با تو، دنیای من رنگین‌تر میشه…",
+  "صدای خنده‌هات قلبمو پر از انرژی می‌کنه…",
+  "با تو بودن مثل اولین روز آشناییه، پر از هیجان…",
+  "هر نگاهت یه حس تازه تو قلبم می‌زنه…",
+  "با هم بودن، حتی در سکوت، شیرینه…",
+  "دستاتو که می‌گیرم، حس می‌کنم همه چیز درست میشه…",
+  "هر روز بیشتر دوستت دارم…",
+  "با تو، هر لحظه یه خاطره جدیده…",
+  "وقتی فکر تو هستم، همه چیز روشن میشه…",
+  "لبخندت مثل نور صبحگاهی، روزمو می‌سازه…",
+  "هیچ کس مثل تو منو خوشحال نمی‌کنه…",
+  "با تو بودن، حتی ساده‌ترین لحظات رو خاص می‌کنه…",
+  "هر پیام تو، دلمو گرم می‌کنه…",
+  "بغلتو می‌خوام 💖<br>تاقانه‌کم، بودن تو قشنگ‌ترین حس دنیاست 💖"
+];
+
+let index = 0;
+let shown = false;
+
+function nextText() {
+  const audio = document.getElementById("music");
+  const textDiv = document.getElementById("text");
+
+  if(!shown){
+    audio.currentTime = 17; 
+    audio.play();
+    shown = true;
+  }
+
+  if(index < texts.length){
+    textDiv.style.opacity = 0;
+    textDiv.style.textShadow = "0 0 15px #fff";
+    setTimeout(() => {
+      textDiv.innerHTML = texts[index];
+      textDiv.style.opacity = 1;
+      textDiv.style.textShadow = "0 0 5px #fff";
+
+      if(index === texts.length - 1){
+        // Fade out موزیک وقتی به آخر متن رسید
+        fadeOutAudio(audio, 3000);
+        setTimeout(() => {
+          textDiv.style.display = "none";
+          document.querySelectorAll('.heart').forEach(h => h.style.display = 'none');
+          document.getElementById('tgLink').style.display = 'inline-block';
+        }, 3000);
+      }
+
+      index++;
+    }, 800);
+  }
+
+  // قلب‌ها: 10 تا
+  for(let i=0; i<10; i++){
+    const h = document.createElement("div");
+    h.className = "heart";
+    h.innerHTML = "❤️";
+    h.style.left = Math.random()*100 + "vw";
+    h.style.animationDuration = (3 + Math.random()*3) + "s";
+    document.body.appendChild(h);
+  }
+}
+
+// تابع کاهش آروم آروم صدا
+function fadeOutAudio(audio, duration){
+  const step = 50;
+  const volStep = audio.volume / (duration / step);
+  const fade = setInterval(() => {
+    if(audio.volume - volStep > 0){
+      audio.volume -= volStep;
+    } else {
+      audio.volume = 0;
+      clearInterval(fade);
+      audio.pause();
+    }
+  }, step);
+}
+</script>
+
+</body>
+</html>
